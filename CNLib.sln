@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNLib", "CNLib\CNLib.csproj", "{AE02CFCC-1067-4F93-BDFE-6CFF97A4ADBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNLib.DaMo", "CNLib.DaMo\CNLib.DaMo.csproj", "{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE02CFCC-1067-4F93-BDFE-6CFF97A4ADBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE02CFCC-1067-4F93-BDFE-6CFF97A4ADBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE02CFCC-1067-4F93-BDFE-6CFF97A4ADBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE02CFCC-1067-4F93-BDFE-6CFF97A4ADBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6F44F97-61B0-4CFA-80F3-D8A96CC8B6A9}
+	EndGlobalSection
+EndGlobal
