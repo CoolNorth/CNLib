@@ -111,9 +111,10 @@ namespace CNLib.CNSocket
                 if (_IPAddress.AddressFamily.ToString() == "InterNetwork")
                 {
                     AddressIP = _IPAddress.ToString();
+                    return AddressIP;
                 }
             }
-            return AddressIP;
+            return String.Empty;
         }
 
         /// <summary>

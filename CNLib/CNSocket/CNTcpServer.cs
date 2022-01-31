@@ -20,23 +20,29 @@ namespace CNLib.CNSocket
         /// JHS - 2021/11/21
         /// 订阅 - 通信服务日志事件
         /// </summary>
-        public event DelegateSocketLog OnSocketLog;
+        public event DelegateSocketLog? OnSocketLog;
 
         /// <summary>
         /// JHS - 2021/11/21
         /// 订阅 - 消息处理事件
         /// </summary>
-        public event DelegateServerMessage OnDataMsg;
+        public event DelegateServerMessage? OnDataMsg;
 
         /// <summary>
         /// 用户连接列表
         /// </summary>
         private List<Socket> lstClient = new List<Socket>();
 
+
         /// <summary>
         /// 私有通讯服务
         /// </summary>
         private Socket? sockServer;
+
+        /// <summary>
+        /// 私有 - 用户连接
+        /// </summary>
+        private Socket? _clientSock;
         /// <summary>
         /// 私有 - 监听端口
         /// </summary>
@@ -50,7 +56,7 @@ namespace CNLib.CNSocket
 
         /// <summary>
         /// JHS - 2021/11/21
-        /// 
+        /// 构造通讯服务 默认本机地址
         /// </summary>
         /// <param name="nPort">监听端口号</param>
         public CNTcpServer(int nPort)
@@ -134,7 +140,6 @@ namespace CNLib.CNSocket
             }
         }
 
-        private Socket _clientSock;
 
         /// <summary>
         /// JHS - 2021/11/21

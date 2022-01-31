@@ -56,7 +56,7 @@ namespace CNLib.CNModel
         /// <returns>结构体字节数组</returns>
         public static byte[] StructToBytes<T>(T structObj)
         {
-            byte[] Buffer = null;
+            byte[]? Buffer = null;
             int nSize = Marshal.SizeOf(typeof(T));
             IntPtr bufferPtr = Marshal.AllocHGlobal(nSize);
             try
@@ -85,7 +85,7 @@ namespace CNLib.CNModel
         /// <returns>结构体实例</returns>
         public static object BytesToStruct(byte[] bytes, Type type)
         {
-            object objStruct = null;
+            object? objStruct = null;
             int nSize = Marshal.SizeOf(type);
             if (nSize > bytes.Length)
             {
