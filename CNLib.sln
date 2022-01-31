@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNLib", "CNLib\CNLib.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNLib.DaMo", "CNLib.DaMo\CNLib.DaMo.csproj", "{B5F82EFC-91FB-4D7E-8578-6411F4F2812C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNLib.ConsoleApp", "CNLib.ConsoleApp\CNLib.ConsoleApp.csproj", "{A75BA50D-65C9-45EA-8BD0-3FA034961357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNLib.ConsoleApp", "CNLib.ConsoleApp\CNLib.ConsoleApp.csproj", "{A75BA50D-65C9-45EA-8BD0-3FA034961357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

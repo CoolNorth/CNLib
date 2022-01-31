@@ -17,9 +17,9 @@ namespace CNLib.CNSocket
         /// <summary>
         /// 事件 - 收到UDP消息
         /// </summary>
-        public event DelegateDUPMessage OnUdpMessage;
+        public event DelegateDUPMessage? OnUdpMessage;
 
-        UdpClient udpClient = null;
+        UdpClient? udpClient = null;
 
         /// <summary>
         /// 构造UDP协议
@@ -65,7 +65,7 @@ namespace CNLib.CNSocket
         /// <param name="obj"></param>
         private void RecvMessage(object obj)
         {
-            byte[] buffer = null;
+            byte[]? buffer = null;
             IPEndPoint point = new IPEndPoint(IPAddress.Any, 0);
 
             while (true)
@@ -75,7 +75,7 @@ namespace CNLib.CNSocket
                     buffer = udpClient.Receive(ref point);
                     if (buffer != null)
                     {
-                        OnUdpMessage(buffer, point);
+                        OnUdpMessage?.Invoke(buffer, point);
                     }
                 }
                 catch (Exception ex)
