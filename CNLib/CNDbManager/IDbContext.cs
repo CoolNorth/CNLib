@@ -7,6 +7,10 @@ namespace CNLib.CNDbManager
 {
     public interface IDbContext
     {
+        object SelectTable(string tableName);
+
+
+
 
         /// <summary>
         /// JHS - 2022/01/13
@@ -31,6 +35,6 @@ namespace CNLib.CNDbManager
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>查询结果</returns>
-        object ExecuteScalar(string strSQL);
+        Object ExecuteScalar(string strSQL);
     }
 }

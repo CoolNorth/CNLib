@@ -1,9 +1,8 @@
 ﻿using CNLib.CNMessage;
+using CNLib.CNSettings;
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace CNLib.CNDbManager.CNMariaDB
 {
@@ -14,16 +13,15 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// <summary>
         /// 连接字符串
         /// </summary>
-        public static string ConnStr = String.Empty;
+        private static string ConnStr = CNConfig.GetConn("MariaDB");
 
         /// <summary>
-        /// JHS - 2022/01/13
-        /// 构造数Maria数据库帮助类
+        /// 修改数据库连接名称
         /// </summary>
-        /// <param name="connStr">连接字符串</param>
-        public MariaDbHelper(string connStr)
+        /// <param name="DBName">连接名称</param>
+        public static void SetConnection(string DBName)
         {
-            ConnStr = connStr;
+            ConnStr = CNConfig.GetConn(DBName);
         }
 
         /// <summary>
@@ -96,6 +94,20 @@ namespace CNLib.CNDbManager.CNMariaDB
             {
                 throw CNLog.NewError("查询列表失败", ex);
             }
+        }
+
+        public Object SelectTable(string tableName)
+        {
+            DataTable dt = new DataTable();
+            string SQL = $"Select * from {tableName}";
+            using (MySqlConnection conn = new MySqlConnection(ConnStr))
+            {
+                conn.Open();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                adapter.Fill(dt);
+            }
+            return dt;
         }
     }
 }
