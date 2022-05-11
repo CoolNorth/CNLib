@@ -11,7 +11,7 @@ namespace CNLib.CNCode
     /// <summary>
     /// 编码
     /// </summary>
-    public class CNCoding // : ICNCoding
+    public class CNCoding : ICNCoding
     {
         private static byte[] key = new byte[]{ 0xAA, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7 };
         private static byte[] iv = new byte[] { 0xCA, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xA6, 0xA7 };
@@ -22,7 +22,7 @@ namespace CNLib.CNCode
         /// </summary>
         /// <param name="strMsg">编码前信息</param>
         /// <returns>编码后数据</returns>
-        static public byte[] Encode(string strMsg)
+        public byte[] Encode(string strMsg)
         {
             // 加密字节数组
             byte[] newBuffer = new byte[] { };
@@ -53,9 +53,7 @@ namespace CNLib.CNCode
                 try
                 {
                     // 关闭流
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     cryptoStream.Close();
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                     memoryStream.Close();
                 }
                 catch (Exception)
@@ -73,7 +71,7 @@ namespace CNLib.CNCode
         /// </summary>
         /// <param name="strMSg">解码前数据</param>
         /// <returns>解码后信息</returns>
-        static public string Decode(byte[] buffer)
+        public string Decode(byte[] buffer)
         {
             // 解码字节数组
             byte[] newBuffer = new byte[] { };
@@ -98,9 +96,7 @@ namespace CNLib.CNCode
                 try
                 {
                     memoryStream.Close();
-#pragma warning disable CS8602 // 解引用可能出现空引用。
                     cryptoStream.Close();
-#pragma warning restore CS8602 // 解引用可能出现空引用。
                 }
                 catch (Exception)
                 {
@@ -115,7 +111,7 @@ namespace CNLib.CNCode
         /// </summary>
         /// <param name="buffer">图标文件数据</param>
         /// <param name="FilePath">文件路径</param>
-        static public void SaveMarkerFile(byte[] buffer, string FilePath)
+        public void Save(byte[] buffer, string FilePath)
         {
             FileStream stream = File.Create(FilePath);
             stream.Write(buffer, 0, buffer.Length);
@@ -128,7 +124,7 @@ namespace CNLib.CNCode
         /// </summary>
         /// <param name="buffer">文档对象</param>
         /// <param name="FilePath">文件路径</param>
-        public static void SaveMarkerFile(XmlDocument doc, string FilePath)
+        public void Save(XmlDocument doc, string FilePath)
         {
             string strContext = doc.OuterXml;
             byte[] buffer = Encode(strContext);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 
 namespace CNLib.CNCode
 {
@@ -30,8 +31,16 @@ namespace CNLib.CNCode
         /// JHS - 2022/01/20
         /// 存储图标文件
         /// </summary>
-        /// <param name="buffer">图标文件数据</param>
+        /// <param name="buffer">文件数据</param>
         /// <param name="FilePath">文件路径</param>
-        void SaveMarkerFile(byte[] buffer, string FilePath);
+        void Save(byte[] buffer, string FilePath);
+
+        /// <summary>
+        /// JHS - 2022/05/11
+        /// 存储文件
+        /// </summary>
+        /// <param name="doc">文档对象</param>
+        /// <param name="FilePath">文件路径</param>
+        void Save(XmlDocument doc, string FilePath);
     }
 }
