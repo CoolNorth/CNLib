@@ -42,7 +42,12 @@ namespace CNLib.CNSocket
         /// 私有 - 端口号
         /// </summary>
         int? _port = null;
-        
+
+        /// <summary>
+        /// 日志类
+        /// </summary>
+        CNLog logger = new CNLog();
+
         /// <summary>
         /// JHS - 2021/11/21
         /// TCP通讯客户端
@@ -100,7 +105,7 @@ namespace CNLib.CNSocket
             }
             catch (Exception ex)
             {
-                OnSocketLog(ex.Message);
+                OnSocketLog?.Invoke(ex.Message);
                 return false;
             }
             
@@ -131,7 +136,7 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    CNLog.LogError(ex);
+                    logger.Error("接收消息异常", ex);
                     if (_client.Connected == false)
                     {
                         OnSocketLog("服务器已关闭");

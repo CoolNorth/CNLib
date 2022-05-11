@@ -52,6 +52,7 @@ namespace CNLib.CNSocket
         /// </summary>
         private string _strip = string.Empty;
 
+        private CNLog logger = new CNLog();
 
 
         /// <summary>
@@ -171,7 +172,7 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    CNLog.LogError(ex);
+                    logger.Error("接收消息异常", ex);
                     OnSocketLog($"用户{_clientSock.RemoteEndPoint} 已离线");
                     _clientSock.Dispose();
                     this.lstClient.Remove(_clientSock);
@@ -202,9 +203,7 @@ namespace CNLib.CNSocket
 
             if (socket == null)
             {
-#pragma warning disable CS8604 // 引用类型参数可能为 null。
                 this.lstClient.Add(client);
-#pragma warning restore CS8604 // 引用类型参数可能为 null。
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace CNLib.CNMessage
 {
@@ -6,48 +7,41 @@ namespace CNLib.CNMessage
     /// JHS - 2021/08/25
     /// 对用户信息的输出
     /// </summary>
-    public class CNLog
+    public class CNLog : ILog
     {
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// JHS - 2021/08/25
-        /// 消息提示
-        /// </summary>
-        /// <param name="strMsg">消息信息</param>
-        public static void LogMsg(string strMsg)
+        public void Debug(string message, Exception ex = null)
         {
-            Console.WriteLine(DateTime.Now.ToString("G") + " Cn - Log: " + strMsg);
+            logger?.Debug(message, ex);
         }
 
-        /// <summary>
-        /// JHS - 2021/08/25
-        /// 错误提示
-        /// </summary>
-        /// <param name="strError">错误信息</param>
-        public static void LogError(string strError)
+        public void Error(string message, Exception ex = null)
         {
-            Console.WriteLine(DateTime.Now.ToString("G") + " Cn - Error: " + strError);
+            logger?.Error(message, ex);
         }
 
-        /// <summary>
-        /// JHS - 2021/11/5
-        /// 错误提示
-        /// </summary>
-        /// <param name="ex">异常对象</param>
-        public static void LogError(Exception ex)
+        public void Fatal(string message, Exception ex = null)
         {
-            Console.WriteLine(DateTime.Now.ToString("G") + " Cn - Error: " + ex.Message);
+            logger?.Fatal(message, ex);
         }
 
-        /// <summary>
-        /// JHS - 2021/08/25
-        /// 警告提示
-        /// </summary>
-        /// <param name="strWaring">警告信息</param>
-        public static void LogWaring(string strWaring)
+        public void Info(string message, Exception ex = null)
         {
-            Console.WriteLine(DateTime.Now.ToString("G") + " Cn - Waring: " + strWaring);
+            logger?.Info(message, ex);
         }
+
+        public void Trace(string message, Exception ex = null)
+        {
+            logger?.Trace(message, ex);
+        }
+
+        public void Warn(string message, Exception ex = null)
+        {
+            logger?.Warn(message, ex);
+        }
+
+
 
         /// <summary>
         /// JHS - 2022/01/13

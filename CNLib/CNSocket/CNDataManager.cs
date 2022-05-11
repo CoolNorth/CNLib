@@ -54,8 +54,6 @@ namespace CNLib.CNSocket
             _stream = new MemoryStream(buffer);
             _reader = new BinaryReader(_stream);
             _writer = new BinaryWriter(_stream);
-
-
         }
         
         

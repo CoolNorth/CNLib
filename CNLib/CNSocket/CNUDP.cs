@@ -21,12 +21,16 @@ namespace CNLib.CNSocket
 
         UdpClient? udpClient = null;
 
+        CNLog logger = null;
+
         /// <summary>
         /// 构造UDP协议
         /// </summary>
         /// <param name="nPort">监听的端口</param>
         public CnUDP(int? nPort)
         {
+            logger = new CNLog();
+
             if (nPort == null)
             {
                 udpClient = new UdpClient();
@@ -80,7 +84,7 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    CNLog.LogError(ex.Message);
+                    logger.Error(ex.Message, ex);
                 }
             }
         }
