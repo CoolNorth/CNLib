@@ -6,15 +6,16 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;8603</NoWarn>
+    <NoWarn>1701;1702;8603;8625;8629</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;8603</NoWarn>
+    <NoWarn>1701;1702;8603;8625;8629</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.28" />
+    <PackageReference Include="MySql.Data" Version="8.0.29" />
+    <PackageReference Include="NLog" Version="4.7.15" />
   </ItemGroup>
 
 </Project>
