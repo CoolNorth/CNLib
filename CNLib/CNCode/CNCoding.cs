@@ -132,5 +132,23 @@ namespace CNLib.CNCode
             stream.Write(buffer, 0, buffer.Length);
             stream.Close();
         }
+
+
+        /*****************/
+
+        /// <summary>
+        /// JHS - 2022/05/11
+        /// MD5加密
+        /// </summary>
+        /// <param name="message">加密前的内容</param>
+        /// <returns>加密后的内容</returns>
+        public static string MD5Coding(string message)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(message);
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] output = md5.ComputeHash(buffer);
+            Array.Reverse(output);
+            return BitConverter.ToString(output).Replace("-", string.Empty);
+        }
     }
 }
