@@ -96,7 +96,7 @@ namespace CNLib.CNSocket
                 IPEndPoint point = new IPEndPoint(IPAddress.Parse(this._strip), this._port.Value);
                 this.sockServer.Bind(point);
                 this.sockServer.Listen(int.MaxValue);
-                OnSocketLog($"成功监听{ this._port }端口");
+                OnSocketLog?.Invoke($"成功监听{ this._port }端口");
 
                 // 启动监听线程
                 Thread listenThread = new Thread(Listener);
@@ -107,7 +107,7 @@ namespace CNLib.CNSocket
             catch (Exception ex)
             {
                 if (OnSocketLog != null)
-                    OnSocketLog(ex.Message);
+                    OnSocketLog?.Invoke(ex.Message);
             }
         }
 
@@ -124,7 +124,7 @@ namespace CNLib.CNSocket
                 {
                     //Socket创建的新连接
                     Socket clientSocket = this.sockServer.Accept();
-                    OnSocketLog($"用户{ clientSocket.RemoteEndPoint } 已连接");
+                    OnSocketLog?.Invoke($"用户{ clientSocket.RemoteEndPoint } 已连接");
 
                     Thread threadAccept = new Thread(AcceptClient);
                     threadAccept.IsBackground = true;
@@ -136,7 +136,7 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    OnSocketLog(ex.Message);
+                    OnSocketLog?.Invoke(ex.Message);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace CNLib.CNSocket
             {
                 if (!sock.Connected)
                 {
-                    OnSocketLog($"用户{sock.RemoteEndPoint} 已离线");
+                    OnSocketLog?.Invoke($"用户{sock.RemoteEndPoint} 已离线");
                 }
                 return sock.LocalEndPoint == client.RemoteEndPoint; 
             });
