@@ -14,7 +14,7 @@ namespace CNLib.CNSocket
     /// JHS - 2021/11/17
     /// Tcp客户端
     /// </summary>
-    public class CNTcpClient
+    public class CNTCPClient
     {
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace CNLib.CNSocket
         /// </summary>
         /// <param name="strIP">连接地址</param>
         /// <param name="nPort">连接端口号</param>
-        public CNTcpClient(string strIP, int nPort)
+        public CNTCPClient(string strIP, int nPort)
         {
             try
             {

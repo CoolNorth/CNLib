@@ -13,7 +13,7 @@ namespace CNLib.CNSocket
 {
 
 
-    public class CNTcpServer
+    public class CNTCPServer
     {
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace CNLib.CNSocket
         /// 构造通讯服务 默认本机地址
         /// </summary>
         /// <param name="nPort">监听端口号</param>
-        public CNTcpServer(int nPort)
+        public CNTCPServer(int nPort)
         {
             this._strip = SockHelper.GetIP();
             this._port = nPort;
@@ -73,7 +73,7 @@ namespace CNLib.CNSocket
         /// </summary>
         /// <param name="strIP">监听地址</param>
         /// <param name="nPort">监听端口号</param>
-        public CNTcpServer(string strIP, int nPort)
+        public CNTCPServer(string strIP, int nPort)
         {
             this._strip = strIP;
             this._port = nPort;
