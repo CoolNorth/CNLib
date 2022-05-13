@@ -124,7 +124,8 @@ namespace CNLib.CNSocket
                 {
                     //Socket创建的新连接
                     Socket clientSocket = this.sockServer.Accept();
-                    OnSocketLog?.Invoke($"用户{ clientSocket.RemoteEndPoint } 已连接");
+                    // OnSocketLog?.Invoke($"用户{ clientSocket.RemoteEndPoint } 已连接");
+                    logger.Info($"用户{ clientSocket.RemoteEndPoint } 已连接");
 
                     Thread threadAccept = new Thread(AcceptClient);
                     threadAccept.IsBackground = true;
@@ -136,7 +137,8 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    OnSocketLog?.Invoke(ex.Message);
+                    // OnSocketLog?.Invoke(ex.Message);
+                    logger.Error("监听启动失败", ex);
                 }
             }
         }
@@ -149,10 +151,8 @@ namespace CNLib.CNSocket
         /// <param name="clientObj"></param>
         private void RecviveClient(object clientObj)
         {
-
             while (true)
             {
-
                 byte[] temp = new byte[1024];
                 _clientSock = clientObj as Socket;
                 try
@@ -164,8 +164,6 @@ namespace CNLib.CNSocket
                     }
 
                     // 查看是否满足一整包
-
-
                     byte[] buffer = new byte[nLen];
                     Array.Copy(temp, 0, buffer, 0, nLen);
                     OnDataMsg?.Invoke(buffer, _clientSock);
