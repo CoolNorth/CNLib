@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext 'Server=www.coolnorth.cn; Port=3306; Database=oacoresapp; Uid=cool; Pwd=north; SslMode=Preferred;' Pomelo.EntityFrameworkCore.Mysql

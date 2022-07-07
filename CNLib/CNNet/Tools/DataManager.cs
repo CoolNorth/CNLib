@@ -61,9 +61,7 @@ namespace CNLib.CNNet.Tools
         private bool ReadHead()
         {
             // 读取四字节 判断是否是帧头
-#pragma warning disable CS8602 // 解引用可能出现空引用。
             byte[] byHead = this._reader.ReadBytes(4);
-#pragma warning restore CS8602 // 解引用可能出现空引用。
             if (this._byHead == byHead)
             {
                 return true;
@@ -96,7 +94,7 @@ namespace CNLib.CNNet.Tools
         /// 读取一个Int32类型的数据
         /// </summary>
         /// <returns>解析结果</returns>
-        private int ReadInt()
+        public int ReadInt()
         {
             return this._reader.ReadInt32();
         }

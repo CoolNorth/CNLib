@@ -9,7 +9,9 @@ using System.Threading;
 namespace CNLib.CNNet
 {
 
-
+    /// <summary>
+    /// 服务端
+    /// </summary>
     public class TCPServer
     {
 
