@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet.Tools
 {
     /// <summary>
     /// JHS - 2021/11/19
     /// 对数据包的解析
     /// </summary>
-    public class CNBuffer
+    public class DataManager
     {
         /// <summary>
         /// 默认帧头
@@ -39,16 +36,11 @@ namespace CNLib.CNSocket
         private BinaryWriter? _writer = null;
 
         /// <summary>
-        /// 包长度
-        /// </summary>
-        private int _Length = 0;
-
-        /// <summary>
         /// JHS - 2021/11/19
         /// 构造
         /// </summary>
         /// <param name="buffer">接收到的数据</param>
-        public CNBuffer(byte[] buffer)
+        public DataManager(byte[] buffer)
         {
             this._buffer = buffer;
             _stream = new MemoryStream(buffer);

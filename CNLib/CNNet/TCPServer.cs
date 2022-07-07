@@ -1,19 +1,16 @@
 ﻿using CNLib.CNMessage;
+using CNLib.CNNet.Tools;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet
 {
 
 
-    public class CNTCPServer
+    public class TCPServer
     {
 
         /// <summary>
@@ -40,10 +37,6 @@ namespace CNLib.CNSocket
         private Socket? sockServer;
 
         /// <summary>
-        /// 私有 - 用户连接
-        /// </summary>
-        private Socket? _clientSock;
-        /// <summary>
         /// 私有 - 监听端口
         /// </summary>
         private int? _port = null;
@@ -52,6 +45,9 @@ namespace CNLib.CNSocket
         /// </summary>
         private string _strip = string.Empty;
 
+        /// <summary>
+        /// 私有 - 日志服务
+        /// </summary>
         private CNLog logger = new CNLog();
 
 
@@ -60,9 +56,9 @@ namespace CNLib.CNSocket
         /// 构造通讯服务 默认本机地址
         /// </summary>
         /// <param name="nPort">监听端口号</param>
-        public CNTCPServer(int nPort)
+        public TCPServer(int nPort)
         {
-            this._strip = SockHelper.GetIP();
+            this._strip = NetHelper.GetIP();
             this._port = nPort;
 
         }
@@ -73,7 +69,7 @@ namespace CNLib.CNSocket
         /// </summary>
         /// <param name="strIP">监听地址</param>
         /// <param name="nPort">监听端口号</param>
-        public CNTCPServer(string strIP, int nPort)
+        public TCPServer(string strIP, int nPort)
         {
             this._strip = strIP;
             this._port = nPort;
@@ -96,18 +92,16 @@ namespace CNLib.CNSocket
                 IPEndPoint point = new IPEndPoint(IPAddress.Parse(this._strip), this._port.Value);
                 this.sockServer.Bind(point);
                 this.sockServer.Listen(int.MaxValue);
-                OnSocketLog?.Invoke($"成功监听{ this._port }端口");
+                logger.Info($"Listener {this._port} Is Open.");
 
                 // 启动监听线程
                 Thread listenThread = new Thread(Listener);
                 listenThread.IsBackground = true;
                 listenThread.Start();
-
             }
             catch (Exception ex)
             {
-                if (OnSocketLog != null)
-                    OnSocketLog?.Invoke(ex.Message);
+                logger.Info($"Listener {this._port} Not Open.\nError: ", ex);
             }
         }
 
@@ -124,8 +118,7 @@ namespace CNLib.CNSocket
                 {
                     //Socket创建的新连接
                     Socket clientSocket = this.sockServer.Accept();
-                    // OnSocketLog?.Invoke($"用户{ clientSocket.RemoteEndPoint } 已连接");
-                    logger.Info($"用户{ clientSocket.RemoteEndPoint } 已连接");
+                    logger.Info($"Client {clientSocket.RemoteEndPoint.ToString()} Connected.");
 
                     Thread threadAccept = new Thread(AcceptClient);
                     threadAccept.IsBackground = true;
@@ -137,7 +130,7 @@ namespace CNLib.CNSocket
                 }
                 catch (Exception ex)
                 {
-                    // OnSocketLog?.Invoke(ex.Message);
+                    //OnSocketLog?.Invoke(ex.Message);
                     logger.Error("监听启动失败", ex);
                 }
             }
@@ -151,33 +144,31 @@ namespace CNLib.CNSocket
         /// <param name="clientObj"></param>
         private void RecviveClient(object clientObj)
         {
+            Socket _clientSock = null;
             while (true)
             {
-                byte[] temp = new byte[1024];
-                _clientSock = clientObj as Socket;
                 try
                 {
-                    int nLen = _clientSock.Receive(temp);
-                    if (nLen == 0)
+                    byte[] temp = new byte[1024];
+                    _clientSock = clientObj as Socket;
+                    int length = _clientSock.Receive(temp);
+                    if (length == 0)
                     {
-                        continue;
+                        break;
                     }
-
-                    // 查看是否满足一整包
-                    byte[] buffer = new byte[nLen];
-                    Array.Copy(temp, 0, buffer, 0, nLen);
-                    OnDataMsg?.Invoke(buffer, _clientSock);
+                    if (!_clientSock.Connected)
+                    {
+                        throw new Exception($"Client {_clientSock.RemoteEndPoint.ToString()} Is Not Connected.");
+                    }
+                    byte[] buffer = new byte[length];
+                    Array.Copy(temp, 0, buffer, 0, length);
+                    OnDataMsg?.Invoke(_clientSock, buffer);
                 }
                 catch (Exception ex)
                 {
-                    logger.Error("接收消息异常", ex);
-                    OnSocketLog($"用户{_clientSock.RemoteEndPoint} 已离线");
-                    _clientSock.Dispose();
-                    this.lstClient.Remove(_clientSock);
-                    break;
+                    logger.Error($"Recvive Error:", ex);
                 }
             }
-            
         }
 
         /// <summary>
@@ -189,26 +180,24 @@ namespace CNLib.CNSocket
         {
             Socket? client = clientSocket as Socket;
 
-            // 检查是否已存在在列表中
-            Socket socket = this.lstClient.Find(sock =>
+            lock (this.lstClient)
             {
-                if (!sock.Connected)
+                List<Socket> list = new List<Socket>(); 
+                // 记录无效连接
+                foreach (Socket item in this.lstClient)
                 {
-                    OnSocketLog?.Invoke($"用户{sock.RemoteEndPoint} 已离线");
+                    if(item.Poll(1000, SelectMode.SelectRead))
+                    {
+                        logger.Info($"Client {item.RemoteEndPoint.ToString()} Off Line.");
+                        list.Add(item); 
+                    }
                 }
-                return sock.LocalEndPoint == client.RemoteEndPoint; 
-            });
-
-            if (socket == null)
-            {
+                foreach (Socket item in list)
+                {
+                    lstClient.Remove(item);
+                }
                 this.lstClient.Add(client);
             }
-            else
-            {
-                int nIndex = this.lstClient.IndexOf(socket);
-                this.lstClient[nIndex] = socket;
-            }
-
         }
 
         /// <summary>
@@ -216,9 +205,9 @@ namespace CNLib.CNSocket
         /// 获取所有用户连接
         /// </summary>
         /// <returns></returns>
-        public Socket GetAllClients()
+        public List<Socket> GetAllClients()
         {
-            return _clientSock;
+            return this.lstClient;
         }
     }
 }

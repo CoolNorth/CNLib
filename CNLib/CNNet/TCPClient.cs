@@ -1,20 +1,16 @@
 ﻿using CNLib.CNMessage;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet
 {
     /// <summary>
     /// JHS - 2021/11/17
     /// Tcp客户端
     /// </summary>
-    public class CNTCPClient
+    public class TCPClient
     {
 
         /// <summary>
@@ -54,7 +50,7 @@ namespace CNLib.CNSocket
         /// </summary>
         /// <param name="strIP">连接地址</param>
         /// <param name="nPort">连接端口号</param>
-        public CNTCPClient(string strIP, int nPort)
+        public TCPClient(string strIP, int nPort)
         {
             try
             {

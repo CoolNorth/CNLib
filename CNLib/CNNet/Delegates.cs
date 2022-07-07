@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet
 {
 
     /// <summary>
@@ -38,7 +33,7 @@ namespace CNLib.CNSocket
     /// </summary>
     /// <param name="buffer">收到的数据</param>
     /// <param name="point">发送者的网络信息</param>
-    public delegate void DelegateServerMessage(byte[] buffer, Socket client);
+    public delegate void DelegateServerMessage(object sender, byte[] buffer);
 
     /// <summary>
     /// JHS - 2021/11/14

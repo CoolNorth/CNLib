@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet
 {
     /// <summary>
     /// JHS - 2021/11/14
@@ -12,7 +12,7 @@ namespace CNLib.CNSocket
     /// 服务端：在构造时必须指定监听的端口号
     /// 客户端：在构造时可传入null值
     /// </summary>
-    public class CnUDP
+    public class UDP
     {
         /// <summary>
         /// 事件 - 收到UDP消息
@@ -27,7 +27,7 @@ namespace CNLib.CNSocket
         /// 构造UDP协议
         /// </summary>
         /// <param name="nPort">监听的端口</param>
-        public CnUDP(int? nPort)
+        public UDP(int? nPort)
         {
             logger = new CNLog();
 
@@ -37,7 +37,7 @@ namespace CNLib.CNSocket
             }
             else
             {
-                IPEndPoint point = SockHelper.GetIP((int)nPort);
+                IPEndPoint point = NetHelper.GetIP((int)nPort);
                 udpClient = new UdpClient(point);
             }
 

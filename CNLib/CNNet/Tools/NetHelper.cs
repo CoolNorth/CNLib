@@ -1,66 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CNLib.CNSocket
+namespace CNLib.CNNet.Tools
 {
-    public class CNSockException: Exception
+    public class SockException: Exception
     {
         
     }
 
-
-    /// <summary>
-    /// Socket状态
-    /// </summary>
-    public enum EnSocketAction
-    {
-        /// <summary>
-        /// 发生连接时
-        /// </summary>
-        Connect = 1,
-        /// <summary>
-        /// 发送数据时
-        /// </summary>
-        SendMsg = 2,
-        /// <summary>
-        /// 关闭连接
-        /// </summary>
-        Close = 4
-    }
-
     /// <summary>
     /// JHS - 2021/11/15
-    /// 对异步接收时的对象状态的封装
-    /// 将socket与接收到的数据封装在一起
+    /// 网络帮助类
     /// </summary>
-    public class StateObject
+    public class NetHelper
     {
-        public TcpClient Client { get; set; }
-        private byte[] listData = new byte[1024];
-        /// <summary>
-        /// 接收的数据
-        /// </summary>
-        public byte[] ListData
-        {
-            get
-            {
-                return listData;
-            }
-            set
-            {
-                listData = value;
-            }
-        }
-    }
-
-    public class SockHelper
-    {
-        static UInt32[] crcTable = {
+        static UInt32[] CRC = {
             0x0, 0x77073096, 0xee0e612c, 0x990951ba, 0x76dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
             0xedb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x9b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
             0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
@@ -95,8 +49,6 @@ namespace CNLib.CNSocket
             0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94, 0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
         };
 
-
-
         /// <summary>
         /// JHS - 2021/11/14
         /// 获取地址字符串
@@ -129,7 +81,6 @@ namespace CNLib.CNSocket
             return point;
         }
 
-
         /// <summary>
         /// JHS - 2021/11/23
         /// CRC32校验
@@ -142,7 +93,7 @@ namespace CNLib.CNSocket
             UInt32 crc = 0xFFFFFFFF;
             for (int i = 0; i < iCount; i++)
             {
-                crc = ((crc >> 8) & 0x00FFFFFF) ^ crcTable[(crc ^ bytes[i]) & 0xFF];
+                crc = ((crc >> 8) & 0x00FFFFFF) ^ CRC[(crc ^ bytes[i]) & 0xFF];
             }
             UInt32 temp = crc ^ 0xFFFFFFFF;
             int t = (int)temp;
