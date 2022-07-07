@@ -17,12 +17,12 @@ namespace CNLib.CNNet
         /// JHS - 2021/11/21
         /// 通信服务日志事件
         /// </summary>
-        public event DelegateSocketLog OnSocketLog;
+        public event DelegateLog OnLog;
 
         /// <summary>
         /// JHS - 2021/11/21 接收数据事件
         /// </summary>
-        public event DelegateClientMessage OnDataMsg;
+        public event DelegateClientMessage OnData;
 
         /// <summary>
         /// 通讯对象
@@ -56,31 +56,14 @@ namespace CNLib.CNNet
             {
                 this._strip = strIP;
                 this._port = nPort;
-                InitDelegate();
             }
             catch (Exception ex)
             {
-                OnSocketLog?.Invoke(ex.Message);
+                OnLog?.Invoke(ex.Message);
             }
 
         }
 
-
-        /// <summary>
-        /// JHS - 2021/11/21
-        /// 初始化委托，避免未订阅异常
-        /// </summary>
-        private void InitDelegate()
-        {
-
-            OnSocketLog = new DelegateSocketLog(delegate (string str) {
-
-            });
-
-            OnDataMsg = new DelegateClientMessage(delegate (byte[] buffer) {
-
-            });
-        }
 
         /// <summary>
         /// JHS - 2021/11/21
@@ -101,7 +84,7 @@ namespace CNLib.CNNet
             }
             catch (Exception ex)
             {
-                OnSocketLog?.Invoke(ex.Message);
+                OnLog?.Invoke(ex.Message, ex);
                 return false;
             }
             
@@ -122,11 +105,11 @@ namespace CNLib.CNNet
                     {
                         byte[] buffer = new byte[1024 * 10];
                         int nLength = _client.Receive(buffer);
-                        OnDataMsg(buffer);
+                        OnData?.Invoke(buffer);
                     }
                     else
                     {
-                        OnSocketLog("请先连接到服务器");
+                        OnLog?.Invoke("请先连接到服务器");
                         break;
                     }
                 }
@@ -135,7 +118,7 @@ namespace CNLib.CNNet
                     logger.Error("接收消息异常", ex);
                     if (_client.Connected == false)
                     {
-                        OnSocketLog("服务器已关闭");
+                        OnLog?.Invoke("服务器已关闭", ex);
                     }
 
                 }
@@ -157,15 +140,15 @@ namespace CNLib.CNNet
                 int nLen = this._client.SendTo(buffer, point as EndPoint); ;
                 if (nLen == buffer.Length)
                 {
-                    OnSocketLog($"发送成功 发送量为:{ nLen }");
+                    OnLog?.Invoke($"发送成功 发送量为:{ nLen }");
                     return true;
                 }
-                OnSocketLog($"发送失败 发送量为:{ nLen }");
+                OnLog?.Invoke($"发送失败 发送量为:{ nLen }");
                 return false;
             }
             catch (Exception ex)
             {
-                OnSocketLog(ex.Message);
+                OnLog?.Invoke("发送数据异常", ex);
                 return false;
             }
 

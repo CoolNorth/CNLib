@@ -17,13 +17,13 @@ namespace CNLib.CNNet
         /// JHS - 2021/11/21
         /// 订阅 - 通信服务日志事件
         /// </summary>
-        public event DelegateSocketLog? OnSocketLog;
+        public event DelegateLog? OnLog;
 
         /// <summary>
         /// JHS - 2021/11/21
         /// 订阅 - 消息处理事件
         /// </summary>
-        public event DelegateServerMessage? OnDataMsg;
+        public event DelegateServerMessage? OnData;
 
         /// <summary>
         /// 用户连接列表
@@ -45,10 +45,10 @@ namespace CNLib.CNNet
         /// </summary>
         private string _strip = string.Empty;
 
-        /// <summary>
-        /// 私有 - 日志服务
-        /// </summary>
-        private CNLog logger = new CNLog();
+        ///// <summary>
+        ///// 私有 - 日志服务
+        ///// </summary>
+        //private CNLog logger = new CNLog();
 
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace CNLib.CNNet
                 IPEndPoint point = new IPEndPoint(IPAddress.Parse(this._strip), this._port.Value);
                 this.sockServer.Bind(point);
                 this.sockServer.Listen(int.MaxValue);
-                logger.Info($"Listener {this._port} Is Open.");
+                OnLog?.Invoke($"Listener {this._port} Is Open.");
 
                 // 启动监听线程
                 Thread listenThread = new Thread(Listener);
@@ -101,7 +101,7 @@ namespace CNLib.CNNet
             }
             catch (Exception ex)
             {
-                logger.Info($"Listener {this._port} Not Open.\nError: ", ex);
+                OnLog?.Invoke($"Listener {this._port} Not Open.\nError: ", ex);
             }
         }
 
@@ -118,7 +118,7 @@ namespace CNLib.CNNet
                 {
                     //Socket创建的新连接
                     Socket clientSocket = this.sockServer.Accept();
-                    logger.Info($"Client {clientSocket.RemoteEndPoint.ToString()} Connected.");
+                    OnLog?.Invoke($"Client {clientSocket.RemoteEndPoint.ToString()} Connected.");
 
                     Thread threadAccept = new Thread(AcceptClient);
                     threadAccept.IsBackground = true;
@@ -131,7 +131,7 @@ namespace CNLib.CNNet
                 catch (Exception ex)
                 {
                     //OnSocketLog?.Invoke(ex.Message);
-                    logger.Error("监听启动失败", ex);
+                    OnLog?.Invoke("监听启动失败", ex);
                 }
             }
         }
@@ -162,11 +162,11 @@ namespace CNLib.CNNet
                     }
                     byte[] buffer = new byte[length];
                     Array.Copy(temp, 0, buffer, 0, length);
-                    OnDataMsg?.Invoke(_clientSock, buffer);
+                    OnData?.Invoke(_clientSock, buffer);
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"Recvive Error:", ex);
+                    OnLog?.Invoke($"Recvive Error:", ex);
                 }
             }
         }
@@ -188,7 +188,7 @@ namespace CNLib.CNNet
                 {
                     if(item.Poll(1000, SelectMode.SelectRead))
                     {
-                        logger.Info($"Client {item.RemoteEndPoint.ToString()} Off Line.");
+                        OnLog?.Invoke($"Client {item.RemoteEndPoint.ToString()} Off Line.");
                         list.Add(item); 
                     }
                 }

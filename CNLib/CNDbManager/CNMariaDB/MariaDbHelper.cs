@@ -1,4 +1,5 @@
 ﻿using CNLib.CNMessage;
+using CNLib.CNNet;
 using CNLib.CNSettings;
 using MySql.Data.MySqlClient;
 using System;
@@ -7,13 +8,21 @@ using System.Data;
 namespace CNLib.CNDbManager.CNMariaDB
 {
 
-
-    public class MariaDbHelper : IDbContext
+    /// <summary>
+    /// JHS - 2022/07/07
+    /// MariaDB数据库帮助类
+    /// </summary>
+    public class MariaDbHelper
     {
         /// <summary>
         /// 连接字符串
         /// </summary>
         private static string ConnStr = CNConfig.GetConn("MariaDB");
+
+        /// <summary>
+        /// 委托 - 日志
+        /// </summary>
+        public static event DelegateLog OnLog;
 
         /// <summary>
         /// 修改数据库连接名称
@@ -22,6 +31,14 @@ namespace CNLib.CNDbManager.CNMariaDB
         public static void SetConnection(string DBName)
         {
             ConnStr = CNConfig.GetConn(DBName);
+            if(ConnStr == String.Empty)
+            {
+                OnLog?.Invoke($"Get {DBName} Connect String Failed, Please Check Config.");
+            }
+            else
+            {
+                OnLog?.Invoke($"Get Connect Succeed Connect String: \n{ConnStr}.");
+            }
         }
 
         /// <summary>
@@ -30,7 +47,7 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>影响到的行数</returns>
-        public int ExecuteNonQuery(string strSQL)
+        public static int ExecuteNonQuery(string strSQL)
         {
             try
             {
@@ -43,8 +60,10 @@ namespace CNLib.CNDbManager.CNMariaDB
             }
             catch (Exception ex)
             {
-                throw CNLog.NewError("执行SQL失败", ex);
+                OnLog?.Invoke("ExecuteNonQuery Failed!", ex);
             }
+
+            return -1;
         }
 
         /// <summary>
@@ -53,7 +72,7 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>查询结果</returns>
-        public object ExecuteScalar(string strSQL)
+        public static object ExecuteScalar(string strSQL)
         {
             try
             {
@@ -65,8 +84,10 @@ namespace CNLib.CNDbManager.CNMariaDB
             }
             catch (Exception ex)
             {
-                throw CNLog.NewError("查询结果失败", ex);
+                OnLog?.Invoke("ExecuteScalar Failed!", ex);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -75,15 +96,15 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>数据列表</returns>
-        public DataTable ExecuteTable(string strSQL)
+        public static DataTable ExecuteTable(string tableName)
         {
-            DataTable? dt = null;
+            DataTable dt = new DataTable();
             try
             {
+                string strSQL = $"Select * from {tableName}";
                 using (MySqlConnection conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
-                    dt = new DataTable();
                     MySqlCommand cmd = new MySqlCommand(strSQL, conn);
                     MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     int nRow = adapter.Fill(dt);
@@ -92,21 +113,9 @@ namespace CNLib.CNDbManager.CNMariaDB
             }
             catch (Exception ex)
             {
-                throw CNLog.NewError("查询列表失败", ex);
+                OnLog?.Invoke("ExecuteTable Failed!", ex);
             }
-        }
 
-        public Object SelectTable(string tableName)
-        {
-            DataTable dt = new DataTable();
-            string SQL = $"Select * from {tableName}";
-            using (MySqlConnection conn = new MySqlConnection(ConnStr))
-            {
-                conn.Open();
-                MySqlDataAdapter adapter = new MySqlDataAdapter();
-                adapter.SelectCommand = new MySqlCommand(SQL, conn);
-                adapter.Fill(dt);
-            }
             return dt;
         }
     }

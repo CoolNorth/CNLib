@@ -1,4 +1,5 @@
 ﻿using CNLib.CNMessage;
+using CNLib.CNNet.Tools;
 using System;
 using System.Net;
 using System.Net.Sockets;

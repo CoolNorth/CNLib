@@ -46,10 +46,17 @@
     /// </summary>
     public class FrameServices
     {
+        /// <summary>
+        /// 委托 - 日志
+        /// </summary>
+        public event DelegateLog OnLog;
 
         public FrameServices() { }
 
-
+        public void StartServices()
+        {
+            OnLog?.Invoke("启动帧服务..");
+        }
 
 
     }

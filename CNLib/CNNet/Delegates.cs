@@ -1,16 +1,16 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace CNLib.CNNet
 {
-
     /// <summary>
     /// JHS - 2021/11/21
     /// 服务中的消息委托，在订阅后可接收消息
     /// </summary>
     /// <param name="strMsg">消息内容</param>
-    public delegate void DelegateSocketLog(string strMsg);
-
+    /// <param name="ex">异常(可空)</param>
+    public delegate void DelegateLog(string strMsg, Exception ex = null);
 
     #region UDP协议委托
 
