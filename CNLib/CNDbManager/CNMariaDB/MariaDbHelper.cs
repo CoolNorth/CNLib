@@ -17,18 +17,18 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// <summary>
         /// 连接字符串
         /// </summary>
-        private static string ConnStr = CNConfig.GetConn("MariaDB");
+        private string ConnStr = CNConfig.GetConn("MariaDB");
 
         /// <summary>
         /// 委托 - 日志
         /// </summary>
-        public static event DelegateLog OnLog;
+        public event DelegateLog OnLog;
 
         /// <summary>
         /// 修改数据库连接名称
         /// </summary>
         /// <param name="DBName">连接名称</param>
-        public static void SetConnection(string DBName)
+        public void SetConnection(string DBName)
         {
             ConnStr = CNConfig.GetConn(DBName);
             if(ConnStr == String.Empty)
@@ -47,7 +47,7 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>影响到的行数</returns>
-        public static int ExecuteNonQuery(string strSQL)
+        public int ExecuteNonQuery(string strSQL)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>查询结果</returns>
-        public static object ExecuteScalar(string strSQL)
+        public object ExecuteScalar(string strSQL)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace CNLib.CNDbManager.CNMariaDB
         /// </summary>
         /// <param name="strSQL">SQL语句</param>
         /// <returns>数据列表</returns>
-        public static DataTable ExecuteTable(string tableName)
+        public DataTable ExecuteTable(string tableName)
         {
             DataTable dt = new DataTable();
             try
